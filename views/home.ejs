@@ -19,8 +19,13 @@
             <li><a href="#" class="hover:underline">Contact Us</a></li>
         </ul>
         <div class="flex space-x-4">
-            <a href="/login" class="hover:underline">Sign In</a>
-            <a href="/signup" class="hover:underline">Register</a>
+             <% if (isLoggedIn) { %>
+                <a href="/profile" class="hover:underline">Profile</a>
+                <a href="/logout" class="hover:underline">Logout</a>
+            <% } else { %>
+                <a href="/login" class="hover:underline">Log In</a>
+                <a href="/signup" class="hover:underline">Register</a>
+                <% } %>
             <a href="#" class="hover:underline">Cart (0)</a>
         </div>
     </nav>
@@ -33,7 +38,7 @@
 
     <!-- Featured Categories -->
     <section class="py-8">
-        <h2 class="text-2xl font-bold text-center mb-4">Featured Categor
+        <h2 class="text-2xl font-bold text-center mb-4">Featured Category</h2>
         <div class="flex justify-around flex-wrap">
             <div class="w-1/4 p-4 text-center">
                 <img src="./images/pizza.jpg" alt="Pizza" class="w-full h-32 object-cover rounded">
@@ -65,7 +70,7 @@
                 <p class="text-lg font-bold">Buy 1 Get 1 Free Burger</p>
             </div>
             <div class="bg-white p-4 rounded shadow-md">
-                <p class="text-lg font-bold">Free Delivery on orders over $30</p>
+                <p class="text-lg font-bold">Free Delivery on orders over ₹30</p>
             </div>
         </div>
     </section>
@@ -77,17 +82,17 @@
             <div class="w-1/4 p-4 text-center">
                 <img src="./images/dish1.jpeg" alt="Dish 1" class="w-full h-32 object-cover rounded">
                 <h3 class="mt-2 text-lg font-bold">Dish Name 1</h3>
-                <p class="mt-1">$10.99</p>
+                <p class="mt-1">₹20</p>
             </div>
             <div class="w-1/4 p-4 text-center">
                 <img src="./images/dish2.jpg" alt="Dish 2" class="w-full h-32 object-cover rounded">
                 <h3 class="mt-2 text-lg font-bold">Dish Name 2</h3>
-                <p class="mt-1">$12.99</p>
+                <p class="mt-1">₹40</p>
             </div>
             <div class="w-1/4 p-4 text-center">
                 <img src="./images/dish3.jpg" alt="Dish 3" class="w-full h-32 object-cover rounded">
                 <h3 class="mt-2 text-lg font-bold">Dish Name 3</h3>
-                <p class="mt-1">$8.99</p>
+                <p class="mt-1">₹100</p>
             </div>
         </div>
     </section>
