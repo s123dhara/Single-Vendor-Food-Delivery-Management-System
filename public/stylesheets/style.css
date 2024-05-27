@@ -1,0 +1,92 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    background-color: #ff6f61;
+    color: white;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+}
+
+.nav-links li {
+    margin: 0 1rem;
+}
+
+.nav-links a {
+    color: white;
+    text-decoration: none;
+}
+
+.user-account, .cart-icon {
+    margin-left: 1rem;
+}
+
+.hero {
+    background: url('hero-image.jpg') center/cover no-repeat;
+    height: 50vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    text-align: center;
+}
+
+.cta {
+    background-color: #ff6f61;
+    color: white;
+    padding: 1rem 2rem;
+    text-decoration: none;
+    margin-top: 1rem;
+    border-radius: 5px;
+}
+
+.featured-categories, .daily-deals, .popular-dishes, .testimonials, .newsletter-signup {
+    padding: 2rem;
+    text-align: center;
+}
+
+.categories, .dishes-grid {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+
+.category, .dish {
+    margin: 1rem;
+    text-align: center;
+}
+
+.testimonials-carousel, .deals-carousel {
+    display: flex;
+    justify-content: center;
+    overflow: auto;
+}
+
+footer {
+    background-color: #333;
+    color: white;
+    padding: 2rem;
+    text-align: center;
+}
+
+.footer-links a, .social-media a {
+    color: white;
+    margin: 0 0.5rem;
+    text-decoration: none;
+}
+
+.contact-info, .location {
+    margin-top: 1rem;
+}

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Foodie Haven</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="font-sans">
+    <!-- Navigation Bar -->
+    <nav class="bg-red-600 text-white p-4 flex justify-between items-center">
+        <div class="text-xl font-bold">Foodie Haven</div>
+        <ul class="flex space-x-4">
+            <li><a href="#" class="hover:underline">Home</a></li>
+            <li><a href="#" class="hover:underline">Menu</a></li>
+            <li><a href="#" class="hover:underline">Deals</a></li>
+            <li><a href="#" class="hover:underline">Locations</a></li>
+            <li><a href="#" class="hover:underline">About Us</a></li>
+            <li><a href="#" class="hover:underline">Contact Us</a></li>
+        </ul>
+        <div class="flex space-x-4">
+            <a href="/login" class="hover:underline">Sign In</a>
+            <a href="/signup" class="hover:underline">Register</a>
+            <a href="#" class="hover:underline">Cart (0)</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="bg-cover bg-center h-64 flex flex-col justify-center items-center text-white" style="background-image: url('./images/bg4.jpg');">
+        <h1 class="text-4xl font-bold">Delicious food delivered to your doorstep</h1>
+        <a href="#" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mt-4">Order Now</a>
+    </header>
+
+    <!-- Featured Categories -->
+    <section class="py-8">
+        <h2 class="text-2xl font-bold text-center mb-4">Featured Categor
+        <div class="flex justify-around flex-wrap">
+            <div class="w-1/4 p-4 text-center">
+                <img src="./images/pizza.jpg" alt="Pizza" class="w-full h-32 object-cover rounded">
+                <a href="#" class="block mt-2 text-lg text-red-600 hover:underline">Order Pizza</a>
+            </div>
+            <div class="w-1/4 p-4 text-center">
+                <img src="./images/burger.jpg" alt="Burger" class="w-full h-32 object-cover rounded">
+                <a href="#" class="block mt-2 text-lg text-red-600 hover:underline">Order Burgers</a>
+            </div>
+            <div class="w-1/4 p-4 text-center">
+                <img src="./images/sushi.jpg" alt="Sushi" class="w-full h-32 object-cover rounded">
+                <a href="#" class="block mt-2 text-lg text-red-600 hover:underline">Order Sushi</a>
+            </div>
+            <div class="w-1/4 p-4 text-center">
+                <img src="./images/desserts.jpg" alt="Dessert" class="w-full h-32 object-cover rounded">
+                <a href="#" class="block mt-2 text-lg text-red-600 hover:underline">Order Desserts</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Daily Deals -->
+    <section class="bg-gray-100 py-8">
+        <h2 class="text-2xl font-bold text-center mb-4">Daily Deals</h2>
+        <div class="flex justify-center space-x-4">
+            <div class="bg-white p-4 rounded shadow-md">
+                <p class="text-lg font-bold">20% off on all pizzas!</p>
+            </div>
+            <div class="bg-white p-4 rounded shadow-md">
+                <p class="text-lg font-bold">Buy 1 Get 1 Free Burger</p>
+            </div>
+            <div class="bg-white p-4 rounded shadow-md">
+                <p class="text-lg font-bold">Free Delivery on orders over $30</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Popular Dishes -->
+    <section class="py-8">
+        <h2 class="text-2xl font-bold text-center mb-4">Popular Dishes</h2>
+        <div class="flex justify-around flex-wrap">
+            <div class="w-1/4 p-4 text-center">
+                <img src="./images/dish1.jpeg" alt="Dish 1" class="w-full h-32 object-cover rounded">
+                <h3 class="mt-2 text-lg font-bold">Dish Name 1</h3>
+                <p class="mt-1">$10.99</p>
+            </div>
+            <div class="w-1/4 p-4 text-center">
+                <img src="./images/dish2.jpg" alt="Dish 2" class="w-full h-32 object-cover rounded">
+                <h3 class="mt-2 text-lg font-bold">Dish Name 2</h3>
+                <p class="mt-1">$12.99</p>
+            </div>
+            <div class="w-1/4 p-4 text-center">
+                <img src="./images/dish3.jpg" alt="Dish 3" class="w-full h-32 object-cover rounded">
+                <h3 class="mt-2 text-lg font-bold">Dish Name 3</h3>
+                <p class="mt-1">$8.99</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="bg-gray-100 py-8">
+        <h2 class="text-2xl font-bold text-center mb-4">What Our Customers Say</h2>
+        <div class="flex justify-center space-x-4">
+            <div class="bg-white p-4 rounded shadow-md">
+                <p class="text-lg italic">"Amazing food and quick delivery!" - Jane D.</p>
+            </div>
+            <div class="bg-white p-4 rounded shadow-md">
+                <p class="text-lg italic">"Best sushi in town!" - Mike R.</p>
+            </div>
+            <div class="bg-white p-4 rounded shadow-md">
+                <p class="text-lg italic">"Great deals and delicious meals." - Emily K.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter Signup -->
+    <section class="py-8">
+        <h2 class="text-2xl font-bold text-center mb-4">Subscribe to our newsletter</h2>
+        <form class="flex justify-center">
+            <input type="email" placeholder="Enter your email" class="p-2 border border-gray-300 rounded-l">
+            <button type="submit" class="bg-red-600 text-white font-bold py-2 px-4 rounded-r">Subscribe</button>
+        </form>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8">
+        <div class="container mx-auto text-center">
+            <div class="flex justify-center space-x-4 mb-4">
+                <a href="#" class="hover:underline">About Us</a>
+                <a href="#" class="hover:underline">Careers</a>
+                <a href="#" class="hover:underline">Privacy Policy</a>
+                <a href="#" class="hover:underline">Terms of Service</a>
+                <a href="#" class="hover:underline">FAQs</a>
+            </div>
+            <div class="flex justify-center space-x-4 mb-4">
+                <a href="#" class="hover:underline">Facebook</a>
+                <a href="#" class="hover:underline">Instagram</a>
+                <a href="#" class="hover:underline">Twitter</a>
+                <a href="#" class="hover:underline">LinkedIn</a>
+            </div>
+            <div class="mb-4">
+                <p>Email: support@foodiehaven.com</p>
+                <p>Phone: 123-456-7890</p>
+            </div>
+            <div>
+                <a href="#" class="hover:underline">Find our locations</a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
