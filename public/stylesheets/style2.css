@@ -1,0 +1,54 @@
+ /* Custom CSS for the layout */
+ .grid-container {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 20px;
+}
+
+.menu {
+    background-color: #F0F4F8;
+    border-radius: 20px;
+    padding: 1rem;
+    transition: background-color 0.3s ease;
+}
+
+.menu a {
+    display: block;
+    padding: 0.5rem 1rem;
+    color: #1E3A8A;
+    font-weight: bold;
+    text-decoration: none;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.menu a:hover {
+    background-color: #E5E9F0;
+    color: #EF4444;
+}
+
+.content {
+    padding: 1rem;
+}
+
+.user-profile-card {
+    display: none;
+    position: fixed;
+    top: 4.5rem; /* Position just below the header */
+    right: 1rem; /* Position from right side */
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 2rem;
+    animation: slideIn 0.3s ease forwards; /* Apply animation */
+}
+
+@keyframes slideIn {
+    from {
+        top: -100%; /* Start position, off the screen */
+        opacity: 0; /* Start with opacity 0 */
+    }
+    to {
+        top: 4.5rem; /* End position, top margin */
+        opacity: 1; /* End with opacity 1 */
+    }
+}

@@ -33,7 +33,7 @@ nav {
 }
 
 .hero {
-    background: url('hero-image.jpg') center/cover no-repeat;
+    /* background: url('hero-image.jpg') center/cover no-repeat; */
     height: 50vh;
     display: flex;
     flex-direction: column;

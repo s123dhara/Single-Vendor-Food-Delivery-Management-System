@@ -9,7 +9,7 @@ router.get("/", (req, res)=>{
 })
 
 router.post("/create", async (req, res) => {
-    let { fullname, email, password, contact } = req.body;
+    let { name, email, password, contact } = req.body;
 
     try {
         let user = await userModel.findOne({ email: email });
@@ -21,7 +21,7 @@ router.post("/create", async (req, res) => {
 
             // Create new user
             user = await userModel.create({
-                fullname: fullname,
+                fullname: name,
                 email: email,
                 password: hashedPassword,
                 contact: contact
