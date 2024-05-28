@@ -1,0 +1,106 @@
+ /* Custom CSS for the layout */
+ .grid-container {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 20px;
+}
+
+.menu {
+    background-color: #F0F4F8;
+    border-radius: 20px;
+    padding: 1rem;
+    transition: background-color 0.3s ease;
+}
+
+.menu a {
+    display: block;
+    padding: 0.5rem 1rem;
+    color: #1E3A8A;
+    font-weight: bold;
+    text-decoration: none;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.menu a:hover {
+    background-color: #E5E9F0;
+    color: #EF4444;
+}
+
+.content {
+    padding: 1rem;
+}
+
+.user-profile-card {
+    display: none;
+    position: fixed;
+    top: 4.5rem;
+    right: 1rem;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 2rem;
+    z-index: 10;
+}
+
+.slide-in {
+    animation: slideIn 0.8s ease forwards;
+}
+
+.slide-out {
+    animation: slideOut 2s ease forwards;
+}
+
+@keyframes slideIn {
+    from {
+        top: -100%;
+        opacity: 0;
+    }
+    to {
+        top: 4.5rem;
+        opacity: 1;
+    }
+}
+
+@keyframes slideOut {
+    from {
+        top: 4.5rem;
+        opacity: 1;
+    }
+    to {
+        top: -100%;
+        opacity: 0;
+    }
+}
+
+/* agian adding */
+.message {
+    display: none; 
+    position: fixed;
+    z-index: 3;
+    top: 20%;
+    right: 0;
+    transform: translate(100%, -0%);
+    background-color: #48bb78; /* Green background */
+    color: #fff; /* White text */
+    padding: 1rem;
+    border-radius: 0.5rem;
+    animation: slideright 0.5s forwards, slideleft 0.5s 4.5s forwards; /* Animation */
+  }
+
+  @keyframes slideright {
+    from {
+      transform: translate(100%, -50%); /* Start position */
+    }
+    to {
+      transform: translate(0, -50%); /* End position */
+    }
+  }
+
+  @keyframes slideleft {
+    from {
+      transform: translate(0, -50%); /* Start position */
+    }
+    to {
+      transform: translate(100%, -50%); /* End position */
+    }
+  }

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - Foodie Haven</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="./stylesheets/style2.css">
+
+</head>
+<body class="bg-gray-100">
+    <!-- Profile Header -->
+    <header class="bg-white p-4 flex justify-between items-center shadow">
+        <div class="flex flex-row items-center mt-2">
+            <a href="/" class="logo-image w-10 h-10 rounded-full overflow-hidden flex items-center justify-center bg-gray-200 shadow-md">
+                <img class="w-10 h-auto" src="/images/logo2.png" alt="Logo">
+            </a>
+            <h2 class="text-lg font-semibold ml-4 mt-1">Welcome, <%= user.fullname %></h2>
+        </div>
+        
+        <div id="profileLogoDiv" class="w-10 h-10 rounded-full overflow-hidden flex items-center justify-center bg-gray-200 shadow-md"> 
+            <img class="w-full h-auto" src="/images/account.png" alt="Logo">
+        </div>
+        
+    </header>
+
+     <!-- User Profile Card  hidden -->
+     <div class="user-profile-card" id="userProfileCard">
+        <div class="w-64 rounded-lg border-2 border-red-500 bg-transparent p-4 text-center shadow-lg dark:bg-gray-800">
+            <figure class="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-red-500 dark:bg-indigo-600">
+                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" class="bi bi-person-fill text-white dark:text-indigo-300" viewBox="0 0 16 16">
+                    <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"></path>
+                </svg>
+            </figure>
+            <h2 class="mt-4 text-xl font-bold text-red-600 dark:text-indigo-400"><%= user.fullname %> </h2>
+            <p class="mb-4 text-gray-600 dark:text-gray-300">Lorem ipsum dolor sit amet.</p>
+            <div class="flex items-center justify-center">
+                <a href="/profile/edit" class="rounded-full bg-red-600 px-4 py-2 text-white hover:bg-red-700">Edit</a>
+                <a href="/logout" class="ml-4 rounded-full bg-gray-300 px-4 py-2 hover:bg-gray-400 dark:bg-gray-700 dark:hover:bg-gray-600">Logout</a>
+            </div>
+        </div>
+    </div>
+
+      
+    <% if (message) { %>
+        <div id="messageBox" class="message">
+          <h2><%= message %></h2>
+        </div>
+    <% } %>
+
+    <!-- Profile Menu and Content -->
+    <div class="grid-container">
+        <!-- Menu -->
+        <div class="menu shadow-md mt-3">
+            <ul>
+                <li><a href="/profile/edit">Edit Profile</a></li>
+                <li><a href="#">Orders</a></li>
+                <li><a href="#" >Offers</a></li>
+                <li><a href="#" >Coins</a></li>
+                <li><a href="#" >About Us</a></li>
+            </ul>
+        </div>
+        
+        <!-- Content -->
+        <div class="content">
+            <div class="bg-white rounded-lg shadow p-4 mb-4">
+                <h2 class="text-xl font-semibold mb-2">User Information</h2>
+                <div class="flex flex-col space-y-2">
+                    <div>
+                        <span class="font-semibold">Name:</span>
+                        <span><%= user.fullname %></span>
+                    </div>
+                    <div>
+                        <span class="font-semibold">Email:</span>
+                        <span><%= user.email %></span>
+                    </div>
+                    <div>
+                        <span class="font-semibold">Phone Number:</span>
+                        <span><%= user.contact %></span>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white rounded-lg shadow p-4 mb-4">
+                <h2 class="text-xl font-semibold mb-2">Orders Summary</h2>
+                <div>
+                    <div class="flex justify-between mb-2">
+                        <span class="font-semibold">Total Orders:</span>
+                        <span>10</span>
+                    </div>
+                </div>
+            </div>
+        
+            <!-- Coins Achievement -->
+            <div class="bg-white rounded-lg shadow p-4 mb-4">
+                <h2 class="text-xl font-semibold mb-2">Coins Achievement</h2>
+                <div>
+                    <div class="flex justify-between mb-2">
+                        <span class="font-semibold">Total Coins:</span>
+                        <span>500</span>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+    <!-- JavaScript to toggle content -->
+    <script src="/javascripts/script.js"></script>
+    
+</body>
+</html>
