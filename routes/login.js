@@ -30,7 +30,7 @@ router.post("/", async (req, res) => {
 
                 // Set the token as a cookie
                 res.cookie('token', token, { httpOnly: true });
-                res.redirect('/profile')
+                res.redirect('/')
 
             } else {
                 req.flash("error", "Invalid Email or Password");

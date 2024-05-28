@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profile - Foodie Haven</title>
+    <title>Edit - Foodie Haven</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="./stylesheets/style2.css">
+    <link rel="stylesheet" href="/stylesheets/style2.css">
 
 </head>
 <body class="bg-gray-100">
@@ -35,25 +35,20 @@
             <h2 class="mt-4 text-xl font-bold text-red-600 dark:text-indigo-400"><%= user.fullname %> </h2>
             <p class="mb-4 text-gray-600 dark:text-gray-300">Lorem ipsum dolor sit amet.</p>
             <div class="flex items-center justify-center">
-                <a href="/profile/edit" class="rounded-full bg-red-600 px-4 py-2 text-white hover:bg-red-700">Edit</a>
+                <a href="#" class="rounded-full bg-red-600 px-4 py-2 text-white hover:bg-red-700">Edit</a>
                 <a href="/logout" class="ml-4 rounded-full bg-gray-300 px-4 py-2 hover:bg-gray-400 dark:bg-gray-700 dark:hover:bg-gray-600">Logout</a>
             </div>
         </div>
     </div>
 
       
-    <% if (message) { %>
-        <div class="message" style="display: block;">
-          <h2> <%= message %> </h2>
-        </div>
-    <% } %>
 
     <!-- Profile Menu and Content -->
     <div class="grid-container">
         <!-- Menu -->
         <div class="menu">
             <ul>
-                <li><a href="/profile/edit">Edit Profile</a></li>
+                <li><a href="#">Edit Profile</a></li>
                 <li><a href="#">Orders</a></li>
                 <li><a href="#" >Offers</a></li>
                 <li><a href="#" >Coins</a></li>
@@ -63,45 +58,27 @@
         
         <!-- Content -->
         <div class="content">
-            <div class="bg-white rounded-lg shadow p-4 mb-4">
-                <h2 class="text-xl font-semibold mb-2">User Information</h2>
-                <div class="flex flex-col space-y-2">
-                    <div>
-                        <span class="font-semibold">Name:</span>
-                        <span><%= user.fullname %></span>
-                    </div>
-                    <div>
-                        <span class="font-semibold">Email:</span>
-                        <span><%= user.email %></span>
-                    </div>
-                    <div>
-                        <span class="font-semibold">Phone Number:</span>
-                        <span><%= user.contact %></span>
-                    </div>
+            <form action="/profile/update" method="POST">
+                <div class="mb-4">
+                    <label for="email" class="block text-gray-700 font-bold mb-2">Email</label>
+                    <input type="email" id="email" name="email" placeholder="Your Email" class="appearance-none bg-gray-300 border rounded w-1/3 py-2 px-3 text-red-900 italic leading-tight focus:outline-none focus:shadow-outline" value="<%= user.email %>" disabled> 
                 </div>
-            </div>
-            <div class="bg-white rounded-lg shadow p-4 mb-4">
-                <h2 class="text-xl font-semibold mb-2">Orders Summary</h2>
-                <div>
-                    <div class="flex justify-between mb-2">
-                        <span class="font-semibold">Total Orders:</span>
-                        <span>10</span>
-                    </div>
+                <div class="mb-4">
+                    <label for="name" class="block text-gray-700 font-bold mb-2">Name</label>
+                    <input type="text" id="name" name="name" placeholder="Your Name" class="appearance-none border rounded w-1/3 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" value="<%= user.fullname %>">
                 </div>
-            </div>
-        
-            <!-- Coins Achievement -->
-            <div class="bg-white rounded-lg shadow p-4 mb-4">
-                <h2 class="text-xl font-semibold mb-2">Coins Achievement</h2>
-                <div>
-                    <div class="flex justify-between mb-2">
-                        <span class="font-semibold">Total Coins:</span>
-                        <span>500</span>
-                    </div>
+                <div class="mb-4">
+                    <label for="password" class="block text-gray-700 font-bold mb-2">Password</label>
+                    <input type="password" id="password" name="password" placeholder="Your Password" class="appearance-none border rounded w-1/3 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" >
                 </div>
-            </div>
-
-
+                <div class="mb-4">
+                    <label for="contact" class="block text-gray-700 font-bold mb-2">Contact</label>
+                    <input type="tel" id="contact" name="contact" placeholder="Your Contact Number" class="appearance-none border rounded w-1/3 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" value="<%= user.contact %>" >
+                </div>
+                <div class="flex items-center justify-between">
+                    <button type="submit" class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Submit</button>
+                </div>
+            </form>
         </div>
     </div>
 

@@ -33,22 +33,73 @@
 .user-profile-card {
     display: none;
     position: fixed;
-    top: 4.5rem; /* Position just below the header */
-    right: 1rem; /* Position from right side */
+    top: 4.5rem;
+    right: 1rem;
     background-color: white;
     border-radius: 10px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     padding: 2rem;
-    animation: slideIn 0.3s ease forwards; /* Apply animation */
+    z-index: 10;
+}
+
+.slide-in {
+    animation: slideIn 0.8s ease forwards;
+}
+
+.slide-out {
+    animation: slideOut 2s ease forwards;
 }
 
 @keyframes slideIn {
     from {
-        top: -100%; /* Start position, off the screen */
-        opacity: 0; /* Start with opacity 0 */
+        top: -100%;
+        opacity: 0;
     }
     to {
-        top: 4.5rem; /* End position, top margin */
-        opacity: 1; /* End with opacity 1 */
+        top: 4.5rem;
+        opacity: 1;
     }
 }
+
+@keyframes slideOut {
+    from {
+        top: 4.5rem;
+        opacity: 1;
+    }
+    to {
+        top: -100%;
+        opacity: 0;
+    }
+}
+
+
+.message {
+    display: none;
+    position: fixed;
+    top: 20%;
+    right: 0;
+    transform: translate(100%, -0%);
+    background-color: #48bb78; /* Green background */
+    color: #fff; /* White text */
+    padding: 1rem;
+    border-radius: 0.5rem;
+    animation: slideIn 0.5s forwards, slideOut 0.5s 4.5s forwards; /* Animation */
+  }
+
+  @keyframes slideIn {
+    from {
+      transform: translate(100%, -50%); /* Start position */
+    }
+    to {
+      transform: translate(0, -50%); /* End position */
+    }
+  }
+
+  @keyframes slideOut {
+    from {
+      transform: translate(0, -50%); /* Start position */
+    }
+    to {
+      transform: translate(100%, -50%); /* End position */
+    }
+  }
