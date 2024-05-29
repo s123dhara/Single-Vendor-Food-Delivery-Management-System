@@ -35,7 +35,7 @@ const loginRouter = require('./routes/login')
 const logoutRouter = require('./routes/logout')
 const profileRouter = require('./routes/profile')
 const productRouter = require('./routes/product')
-
+const aboutRouter = require('./routes/about')
 
 //acquire Routers
 app.use("/signup", signupRouter)
@@ -43,6 +43,7 @@ app.use("/login", loginRouter)
 app.use("/logout", logoutRouter)
 app.use("/profile", profileRouter)
 app.use("/product", productRouter)
+app.use("/about", aboutRouter)
 
 //db 
 const db = require('./config/mongoose-connect')

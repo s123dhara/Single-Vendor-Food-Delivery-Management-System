@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 const config = require('../config/config');
+const orderModel = require('../models/order')
 
 function isUserLoggedIn(req, res, next) {
     const token = req.cookies.token;
@@ -20,4 +21,16 @@ function isUserLoggedIn(req, res, next) {
     }
 }
 
-module.exports = { isUserLoggedIn };
+
+function calculateTotal(orderedItems) {
+    let total = 0;
+    // Iterate over each ordered item
+    orderedItems.forEach(item => {
+        // Add the price of each item to the total
+        total += item.price * item.quantity;
+    });
+    // Return the total charge
+    return total.toFixed(2); // Ensure the total is formatted with two decimal places
+}
+
+module.exports = { isUserLoggedIn , calculateTotal};

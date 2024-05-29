@@ -8,9 +8,9 @@ const orderSchema = new mongoose.Schema({
     date: {
         type: Date, // Changed from `Date` to `date` to follow camelCase convention
     },
-    orderedItem: {
-        type: Array,
-        default: []
+    orderedItems : {
+        type : Array,
+        default : []
     }
 });
 

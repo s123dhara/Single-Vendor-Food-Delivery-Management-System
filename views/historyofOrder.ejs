@@ -3,10 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profile - Foodie Haven</title>
+    <title>Order History</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="./stylesheets/style2.css">
-
+    <link rel="stylesheet" href="/stylesheets/style2.css">
 </head>
 <body class="bg-gray-100">
     <!-- Profile Header -->
@@ -41,13 +40,6 @@
         </div>
     </div>
 
-      
-    <% if (message) { %>
-        <div id="messageBox" class="message">
-          <h2><%= message %></h2>
-        </div>
-    <% } %>
-
     <!-- Profile Menu and Content -->
     <div class="grid-container">
         <!-- Menu -->
@@ -58,56 +50,51 @@
                 <li><a href="/product/orderhistory">Orders</a></li>
                 <li><a href="#" >Offers</a></li>
                 <li><a href="#" >Coins</a></li>
-                <li><a href="/about" >About Us</a></li>
+                <li><a href="#" >About Us</a></li>
             </ul>
         </div>
         
         <!-- Content -->
         <div class="content">
-            <div class="bg-white rounded-lg shadow p-4 mb-4">
-                <h2 class="text-xl font-semibold mb-2">User Information</h2>
-                <div class="flex flex-col space-y-2">
-                    <div>
-                        <span class="font-semibold">Name:</span>
-                        <span><%= user.fullname %></span>
-                    </div>
-                    <div>
-                        <span class="font-semibold">Email:</span>
-                        <span><%= user.email %></span>
-                    </div>
-                    <div>
-                        <span class="font-semibold">Phone Number:</span>
-                        <span><%= user.contact %></span>
-                    </div>
-                </div>
-            </div>
-            <div class="bg-white rounded-lg shadow p-4 mb-4">
-                <h2 class="text-xl font-semibold mb-2">Orders Summary</h2>
-                <div>
-                    <div class="flex justify-between mb-2">
-                        <span class="font-semibold">Total Orders:</span>
-                        <span><%= user.orderedHistory.length %></span>
-                    </div>
-                </div>
-            </div>
+            <div class="max-w-4xl mx-auto bg-white p-8 rounded-lg shadow-lg">
         
-            <!-- Coins Achievement -->
-            <div class="bg-white rounded-lg shadow p-4 mb-4">
-                <h2 class="text-xl font-semibold mb-2">Coins Achievement</h2>
-                <div>
-                    <div class="flex justify-between mb-2">
-                        <span class="font-semibold">Total Coins:</span>
-                        <span>500</span>
-                    </div>
-                </div>
+                <h1 class="text-2xl font-bold mb-4">Order History</h1>
+        
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total Charge</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        <% user.orderedHistory.forEach(order => { %>
+                            <tr>
+                                <td class="px-6 py-4 w-1/2">
+                                    <div class="flex flex-wrap">
+                                        <% order.orderedItems.forEach(item => { %>
+                                            <span class="inline-block bg-gray-200 px-2 py-1 rounded-lg mb-1 mr-1"><%= item.name %></span>
+                                        <% }); %>
+                                    </div>
+                                </td>
+                                
+                                
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <% // Format the date using JavaScript %>
+                                    <% const orderDate = new Date(order.date); %>
+                                    <%= orderDate.getDate() + '/' + (orderDate.getMonth() + 1) + '/' + orderDate.getFullYear() %> <%= +" "+  orderDate.getHours() + ':' + orderDate.getMinutes() + ':' + orderDate.getSeconds() %>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">$<%= calculateTotal(order.orderedItems) %></td>
+                            </tr>
+                        <% }); %>
+                    </tbody>
+                </table>
+        
             </div>
-
-
-        </div>
+        </div>        
     </div>
 
-    <!-- JavaScript to toggle content -->
     <script src="/javascripts/script.js"></script>
-    
 </body>
 </html>

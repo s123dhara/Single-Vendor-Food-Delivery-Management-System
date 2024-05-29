@@ -12,14 +12,16 @@
     <header class="bg-white p-4 flex justify-between items-center shadow">
         <div class="flex items-center">
             <div class="logo-image w-10 h-10 rounded-full overflow-hidden flex items-center justify-center bg-gray-200 shadow-md">
-                <img class="w-full h-auto" src="/images/logo2.png" alt="Logo">
+                <a href="/" class="logo-image w-10 h-10 rounded-full overflow-hidden flex items-center justify-center bg-gray-200 shadow-md">
+                    <img class="w-10 h-auto" src="/images/logo2.png" alt="Logo">
+                </a>
             </div>
             <h1 class="text-lg font-semibold ml-4">Foodie Haven</h1>
         </div>
         <nav>
-            <a href="#" class="text-red-600 hover:underline ml-4">Home</a>
+            <a href="/" class="text-red-600 hover:underline ml-4">Home</a>
             <a href="#" class="text-red-600 hover:underline ml-4">Contact</a>
-            <a href="#" class="text-red-600 hover:underline ml-4">Cart (0)</a>
+            <a href="/product/cart" class="text-red-600 hover:underline ml-4">Cart (<span id="cart-count">0</span>)</a>
         </nav>
     </header>
 
@@ -36,16 +38,86 @@
                         <h3 class="text-xl font-bold"><%= product.fullname %></h3>
                         <p class="text-gray-600 mt-2"><%= product.description %></p>
                         <p class="text-red-600 font-bold mt-2">₹<%= product.price %></p>
-                        <button class="mt-4 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">Add to Cart</button>
+                        <div class="flex items-center mt-4">
+                                    <button class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
+                                            data-name="<%= product.fullname %>"
+                                            data-price="<%= product.price %>"
+                                            onclick="addToCart(this)">
+                                        Add to Cart
+                                    </button>
+
+                            <div class="flex flex-row items-center ml-4">
+                                <label class="text-xl font-bold px-2">Quantity</label>
+                                <button class="bg-gray-300 text-gray-700 py-1 px-3 rounded-l hover:bg-gray-400" onclick="decreaseQuantity(this)">-</button>
+                                <input type="text" value="1" class="w-12 text-center border border-gray-300 mx-1" readonly>
+                                <button class="bg-gray-300 text-gray-700 py-1 px-3 rounded-r hover:bg-gray-400" onclick="increaseQuantity(this)">+</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             <% }) %>
-
-
-
-
         </div>
     </main>
+
+    <script>
+        function increaseQuantity(button) {
+            try {
+                var quantityInput = button.parentElement.querySelector('input[type="text"]');
+                var currentQuantity = parseInt(quantityInput.value);
+                if (!isNaN(currentQuantity)) {
+                    quantityInput.value = currentQuantity + 1;
+                }
+            } catch (error) {
+                // Suppress error silently
+            }
+        }
+
+        function decreaseQuantity(button) {
+            try {
+                var quantityInput = button.parentElement.querySelector('input[type="text"]');
+                var currentQuantity = parseInt(quantityInput.value);
+                if (!isNaN(currentQuantity) && currentQuantity > 1) {
+                    quantityInput.value = currentQuantity - 1;
+                }
+            } catch (error) {
+                // Suppress error silently
+            }
+        }
+
+        function addToCart(button) {
+            try {
+                var name = button.dataset.name;
+                var price = parseFloat(button.dataset.price);
+                var quantityInput = button.parentElement.querySelector('input[type="text"]');
+                var quantity = parseInt(quantityInput.value);
+
+                var cart = JSON.parse(localStorage.getItem('cart')) || [];
+                var existingItem = cart.find(item => item.name === name);
+
+                if (existingItem) {
+                    existingItem.quantity += quantity;
+                } else {
+                    cart.push({ name: name, price: price, quantity: quantity });
+                }
+
+                localStorage.setItem('cart', JSON.stringify(cart));
+                updateCartCount();
+            } catch (error) {
+            // Suppress error silently
+        }
+}
+
+
+        function updateCartCount() {
+            var cart = JSON.parse(localStorage.getItem('cart')) || [];
+            var totalCount = cart.reduce((acc, item) => acc + item.quantity, 0);
+            document.getElementById('cart-count').innerText = totalCount;
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            updateCartCount();
+        });
+    </script>
 
 </body>
 </html>

@@ -13,13 +13,12 @@ const userSchema = new mongoose.Schema({
     contact: {
         type: Number,
     },
-    cart: {
-        type: Array,
-        default: [],
-    },
     orderedHistory: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "order" // This should be consistent with the order model's name
+
+        type : [{ type: mongoose.Schema.Types.ObjectId,
+            ref: "order" }],
+        
+            default : []
     }
 });
 

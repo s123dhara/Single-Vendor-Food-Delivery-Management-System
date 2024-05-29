@@ -6,6 +6,7 @@ const bcrypt = require("bcrypt");
 const { isUserLoggedIn } = require("../middleware/userhandler");
 const userModel = require("../models/user");
 const flash = require("connect-flash");
+const orderModel = require('../models/order')
 
 router.get("/", isUserLoggedIn, async (req, res) => {
   // console.log(req.user)
