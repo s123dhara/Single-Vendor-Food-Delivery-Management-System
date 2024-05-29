@@ -74,7 +74,6 @@
 
 /* agian adding */
 .message {
-    display: none; 
     position: fixed;
     z-index: 3;
     top: 20%;
@@ -84,23 +83,32 @@
     color: #fff; /* White text */
     padding: 1rem;
     border-radius: 0.5rem;
-    animation: slideright 0.5s forwards, slideleft 0.5s 4.5s forwards; /* Animation */
-  }
+     display: none; 
+}
 
-  @keyframes slideright {
+.show {
+    display: block;
+    animation: slideright 0.5s forwards;
+}
+
+.hide {
+    animation: slideleft 0.5s forwards;
+}
+
+@keyframes slideright {
     from {
-      transform: translate(100%, -50%); /* Start position */
+        transform: translate(100%, -50%); /* Start position */
     }
     to {
-      transform: translate(0, -50%); /* End position */
+        transform: translate(0, -50%); /* End position */
     }
-  }
+}
 
-  @keyframes slideleft {
+@keyframes slideleft {
     from {
-      transform: translate(0, -50%); /* Start position */
+        transform: translate(0, -50%); /* Start position */
     }
     to {
-      transform: translate(100%, -50%); /* End position */
+        transform: translate(100%, -50%); /* End position */
     }
-  }
+}

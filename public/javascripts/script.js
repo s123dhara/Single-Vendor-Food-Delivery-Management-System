@@ -57,16 +57,47 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 document.addEventListener("DOMContentLoaded", function() {
-    const messageBox = document.getElementById("messageBox");
-    messageBox.style.display = 'none'
-    if (messageBox) {
-        // Remove the hidden class to show the message
-        messageBox.style.display = 'block'
-
-        // Set a timeout to hide the message after 5 seconds
-        setTimeout(function() {
-            messageBox.style.display = 'none'
-        }, 5000); // 5000 milliseconds = 5 seconds
-    }
+    showMessage2();
     
 });
+document.addEventListener('DOMContentLoaded', function() {
+    showMessage();
+});
+
+
+
+
+function showMessage2() {
+    const messageBox = document.getElementById("messageBox")
+    
+    if (messageBox) {
+        // Show the message box with slide-in animation
+        messageBox.classList.add('show');
+        messageBox.classList.remove('hide');
+        messageBox.style.display = 'block';
+
+        // Hide the message box after 5 seconds with slide-out animation
+        setTimeout(function() {
+            messageBox.classList.add('hide');
+            messageBox.classList.remove('show');
+
+            // Set display to none after the slide-out animation ends (0.5s)
+            setTimeout(function() {
+                messageBox.style.display = 'none';
+            }, 500);
+        }, 5000);
+    }
+}
+
+function showMessage(){
+    const messageBox = document.querySelector('.product-upadate-message')
+
+    if(messageBox){
+        setTimeout(function(){
+            messageBox.style.display = 'none'
+        }, 1000);
+    }
+}
+
+
+

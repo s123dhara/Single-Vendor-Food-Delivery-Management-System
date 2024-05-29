@@ -12,16 +12,22 @@
     <header class="bg-white p-4 flex justify-between items-center shadow">
         <div class="flex items-center">
             <div class="logo-image w-10 h-10 rounded-full overflow-hidden flex items-center justify-center bg-gray-200 shadow-md">
-                <img class="w-full h-auto" src=".../images/logo2.png" alt="Logo">
+                <img class="w-full h-auto" src="/images/logo2.png" alt="Logo">
             </div>
             <h1 class="text-lg font-semibold ml-4">Foodie Haven Admin Panel</h1>
         </div>
     </header>
 
+    <% if ( message) { %>
+        <div class="product-upadate-message text-2xl text-green-500 px-4 py-2 tracking-tighter font-bold mt-2">
+            <h2><%= message %></h2>
+        </div>
+     <% } %>   
+
     <!-- Main Content -->
     <main class="container w-1/2 m-auto py-8">
         <h2 class="text-2xl font-bold mb-6">Add New Menu Item</h2>
-        <form id="menuItemForm" class="bg-white p-6 rounded-lg shadow-md mb-8">
+        <form id="menuItemForm" class="bg-white p-6 rounded-lg shadow-md mb-8" action="/product/createProduct" method="post">
             <div class="mb-4">
                 <label for="name" class="block text-gray-700 font-bold mb-2">Name</label>
                 <input type="text" id="name" name="name" placeholder="Item Name" class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
@@ -37,5 +43,7 @@
             <input type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" value="Add Item">
         </form>
     </main>
+
+    <script src="/javascripts/script.js"></script>
 </body>
 </html>

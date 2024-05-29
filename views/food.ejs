@@ -29,15 +29,21 @@
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 
             <!-- Food Item Card -->
-            <div class="bg-white rounded-lg shadow-lg p-6">
-                <img src="/images/dish3.jpg" alt="Food Item" class="w-full h-48 object-cover rounded-t-lg">
-                <div class="mt-4">
-                    <h3 class="text-xl font-bold">Delicious Pizza</h3>
-                    <p class="text-gray-600 mt-2">A tasty and cheesy pizza with fresh ingredients.</p>
-                    <p class="text-red-600 font-bold mt-2">$12.99</p>
-                    <button class="mt-4 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">Add to Cart</button>
+            <% products.forEach( function (product) { %>
+                <div class="bg-white rounded-lg shadow-lg p-6">
+                    <img src="/images/dish3.jpg" alt="Food Item" class="w-full h-48 object-cover rounded-t-lg">
+                    <div class="mt-4">
+                        <h3 class="text-xl font-bold"><%= product.fullname %></h3>
+                        <p class="text-gray-600 mt-2"><%= product.description %></p>
+                        <p class="text-red-600 font-bold mt-2">₹<%= product.price %></p>
+                        <button class="mt-4 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">Add to Cart</button>
+                    </div>
                 </div>
-            </div>
+            <% }) %>
+
+
+
+
         </div>
     </main>
 
