@@ -15,7 +15,7 @@
             </a>
             <div class="flex items-center space-x-4">
                 <a href="#" class="text-gray-700 hover:text-blue-500">Status</a>
-                <a href="#" class="text-gray-700 hover:text-blue-500">Pending</a>
+                <a href="#" class="text-gray-700 hover:text-blue-500" id="pending">Pending <span>(0)</span></a>
                 <a href="#" class="text-gray-700 hover:text-blue-500">Delivered</a>
             </div>
         </div>
@@ -41,31 +41,58 @@
        <!-- Order cards container -->
        <h1>real time data chekcing</h1>
        <div class="container mx-auto space-y-4" id="orderContainer">
-        <% orders.forEach( order => {  %>
-            <div class="bg-white shadow-md rounded-lg p-6 w-full flex justify-between items-start">
-                <div class="px-2 py-2">
-                    <h3 class="text-xl font-bold mb-2"><%= order.orderNo %></h3>
-                    <p class="text-gray-700">Customer: <%= order.user.fullname %></p>
-                    <ul class="text-gray-700">
-                        <% order.orderedItems.forEach(item => { %>
-                            <li><%= item.name %> - Quantity: <%= item.quantity %></li>
-                        <% }) %>
-                    </ul>
-                    <p class="text-gray-700">$<%= calculateTotal(order.orderedItems) %></p>
-                    <p class="text-gray-700">Order Date: 2024-05-29</p>
+        <% orders.forEach(order => { %>
+           <% if ( order.orderStatus === "" ){  %>
+                <div class="bg-white shadow-md rounded-lg p-6 w-full flex justify-between items-start" id="order-<%= order._id %>">
+                    <div class="px-2 py-2">
+                        <h3 class="text-xl font-bold mb-2"><%= order.orderNo %></h3>
+                        <p class="text-gray-700">Customer: <%= order.user.fullname %></p>
+                        <ul class="text-gray-700">
+                            <% order.orderedItems.forEach(item => { %>
+                                <li><%= item.name %> - Quantity: <%= item.quantity %></li>
+                            <% }) %>
+                        </ul>
+                        <p class="text-gray-700">$<%= calculateTotal(order.orderedItems) %></p>
+                        <p class="text-gray-700">Order Date: 2024-05-29</p>
+                    </div>
+                    <div class="space-x-2 py-10 flex flex-row justify-between flex-wrap">
+                        <button class="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600" onclick="acceptOrder('<%= order._id %>')">Accept</button>
+                        <button class="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600">Reject</button>
+                    </div>
                 </div>
-                <div class="space-x-2 py-10 flex flex-row justify-between flex-wrap">
-                    <button class="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600">Accept</button>
-                    <button class="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600">Reject</button>
-                </div>
-            </div>
-        <%  }) %>
+           <% } %>
+
+        <% }) %>
     </div>
 </div>
 
 <!-- Socket.io script -->
 <script src="/socket.io/socket.io.js"></script>
 <script>
+    function updateCartCount() {
+            var cart = JSON.parse(localStorage.getItem('cart')) || [];
+            var totalCount = cart.reduce((acc, item) => acc + item.quantity, 0);
+            document.getElementById('cart-count').innerText = totalCount;
+            document.getElementById('cart-link').innerText = `Cart (${totalCount})`;
+        }
+
+function acceptOrder(orderId) {
+        // Prepare data
+        const data = {
+            orderId: orderId,
+            action: 'accept' // Indicate the action (accept or reject)
+        };
+
+        // Emit the 'orderAction' event along with the data
+        socket.emit('orderAction', data);
+
+        var orderDiv = document.getElementById('order-' + orderId);
+        if (orderDiv) {
+            // Remove the order div from the DOM
+            orderDiv.remove();
+        }
+    }
+
     function calculateTotal(orderedItems) {
         let total = 0;
         orderedItems.forEach(item => {
@@ -127,7 +154,15 @@
         const acceptButton = document.createElement('button');
         acceptButton.classList.add('bg-green-500', 'text-white', 'px-4', 'py-2', 'rounded-md', 'hover:bg-green-600');
         acceptButton.textContent = 'Accept';
-        
+        acceptButton.addEventListener('click', () => {
+            const data = {
+                orderId : order._id,
+                action : 'accept'
+            }
+            socket.emit('orderAction', data)
+            orderItem.remove(); // Remove the order item div when the Accept button is clicked
+        });
+                
         const rejectButton = document.createElement('button');
         rejectButton.classList.add('bg-red-500', 'text-white', 'px-4', 'py-2', 'rounded-md', 'hover:bg-red-600');
         rejectButton.textContent = 'Reject';
@@ -144,10 +179,12 @@
         orderItem.appendChild(orderDetailsDiv)
         orderItem.appendChild(buttonsDiv)
         
-        orderList.appendChild(orderItem)
-        
 
-
+        if(orderList.firstChild){
+            orderList.insertBefore(orderItem, orderList.firstChild)
+        }else{
+            orderList.appendChild(orderItem)
+        }
         
     });
 

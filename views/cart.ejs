@@ -135,7 +135,7 @@
                         item.quantity = quantity;
                     }
             });
-
+            localStorage.setItem('cart', JSON.stringify(cart));
             updateTotal();
         }
 

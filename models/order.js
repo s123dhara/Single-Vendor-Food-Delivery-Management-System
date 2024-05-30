@@ -17,7 +17,7 @@ const orderSchema = new mongoose.Schema({
         default : []
     },
 
-    orderStatus : {type : String}
+    orderStatus : {type : String, default : ""}
 
 });
 

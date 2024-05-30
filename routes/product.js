@@ -57,6 +57,13 @@ router.post("/createOrder", isUserLoggedIn, async (req, res) => {
 });
 
 
+router.post('/updateStatus', async (req, res)=>{
+    let {orderId , status } = req.body
+    let order = await orderModel.findOneAndUpdate({_id : orderId}, {status : status})
+    res.redirect('/management')
+})
+
+
 if(config.env === 'development'){
     router.get('/addProduct', (req, res)=>{
         const message = req.flash('message')

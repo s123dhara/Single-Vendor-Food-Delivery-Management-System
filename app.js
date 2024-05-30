@@ -57,6 +57,15 @@ io.on('connection', (socket) => {
         io.emit('newOrder', ({order, user}));
     });
 
+
+    socket.on('orderAction', async (data) => {
+        console.log( ` data will be : ${data.action} and ${data.orderId}`)
+        let order = await orderModel.findOne({_id : data.orderId})
+        order.orderStatus = data.action
+        await order.save()
+        console.log(order)
+    })
+
     socket.on('disconnect', () => {
         console.log('Client disconnected');
     });
@@ -88,7 +97,6 @@ app.get('/exampl', async (req, res) => {
             $lt: new Date(today.getTime() + 24 * 60 * 60 * 1000) // Less than tomorrow
         }
     });
-    console.log(orders)
     // Render the 'exampl' view with the found orders
     res.render('exampl', { orders: orders });
 });
