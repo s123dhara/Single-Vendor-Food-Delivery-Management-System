@@ -6,6 +6,12 @@ const productModel = require('../models/product')
 const orderModel = require('../models/order')
 const userModel = require('../models/user')
 const { isUserLoggedIn, calculateTotal } = require('../middleware/userhandler')
+const socketIo = require('socket.io-client'); // Import socket.io-client library
+
+// Set up Socket.IO client to connect to the server
+const socket = socketIo('http://localhost:3000'); // Adjust the URL as needed
+
+var orderNo = 0
 
 router.get("/", async (req, res) => {
     let products = await productModel.find()
@@ -27,15 +33,20 @@ router.get("/orderhistory", isUserLoggedIn , async (req, res)=>{
 
 router.post("/createOrder", isUserLoggedIn, async (req, res) => {
     try {
+        orderNo += 1;
         let orderOfuser = await orderModel.create({
             orderedItems: req.body.orderedItems,
             user: req.user.userid,
-            date: Date.now()
+            date: Date.now(),
+            orderNo: orderNo
         });
 
-        let user = await userModel.findOne({_id : req.user.userid})
-        user.orderedHistory.push(orderOfuser._id)
-        await user.save()
+        let user = await userModel.findOne({_id : req.user.userid});
+        user.orderedHistory.push(orderOfuser._id);
+        await user.save();
+
+        // Emit a 'newOrder' event when a new order is created
+        socket.emit('newOrder', { order : orderOfuser, user : user}); // Pass orderOfuser directly
 
         // Send a success response with the URL to redirect to
         res.status(200).json({ success: true, redirectTo: '/product/orderConfirmation' });
@@ -46,34 +57,26 @@ router.post("/createOrder", isUserLoggedIn, async (req, res) => {
 });
 
 
-
 if(config.env === 'development'){
-router.get('/addProduct', (req, res)=>{
-    const message = req.flash('message')
-    res.render('adminAddingProduct' , {message})
-})
+    router.get('/addProduct', (req, res)=>{
+        const message = req.flash('message')
+        res.render('adminAddingProduct' , {message})
+    })
 }else{
     console.log('Buddy go gome')
 }
 
-
 if(config.env === 'development'){
     router.post('/createProduct', async (req, res)=>{
-
         let {name, description, price} = req.body
         let product = await productModel.create({
             fullname : name, 
             description : description,
             price : price
         })
-
         req.flash("message", "Product is Added")
         res.redirect('/product/addProduct')
-
     })
 }
 
-
-
-
-module.exports = router
+module.exports = router;

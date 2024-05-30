@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Management</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 p-6">
+    <!-- Your navigation bar and header content -->
+    <nav class="bg-white shadow-md p-4">
+        <div class="flex justify-between items-center">
+            <a href="/" class="logo-image w-10 h-10 rounded-full overflow-hidden flex items-center justify-center bg-gray-200 shadow-md">
+                <img class="w-10 h-auto" src="/images/logo2.png" alt="Logo">
+            </a>
+            <div class="flex items-center space-x-4">
+                <a href="#" class="text-gray-700 hover:text-blue-500">Status</a>
+                <a href="#" class="text-gray-700 hover:text-blue-500">Pending</a>
+                <a href="#" class="text-gray-700 hover:text-blue-500">Delivered</a>
+            </div>
+        </div>
+    </nav>
+    <header class="mb-6">
+        <h1 class="text-3xl py-2 mt-4 font-bold text-center text-gray-800">Order Management Dashboard</h1>
+    </header>
+
+    <div class="container mx-auto space-y-4">
+        <div class="bg-white shadow-md rounded-lg p-6 w-full">
+            <div class="flex justify-between">
+                <div>
+                    <h2 class="text-lg font-semibold mb-2">Total Orders</h2>
+                    <p class="text-gray-700">100</p>
+                </div>
+                <div>
+                    <h2 class="text-lg font-semibold mb-2">Total Revenue</h2>
+                    <p class="text-gray-700">$10,000</p>
+                </div>
+            </div>
+        </div>
+
+       <!-- Order cards container -->
+       <h1>real time data chekcing</h1>
+       <div class="container mx-auto space-y-4" id="orderContainer">
+        <% orders.forEach( order => {  %>
+            <div class="bg-white shadow-md rounded-lg p-6 w-full flex justify-between items-start">
+                <div class="px-2 py-2">
+                    <h3 class="text-xl font-bold mb-2"><%= order.orderNo %></h3>
+                    <p class="text-gray-700">Customer: <%= order.user.fullname %></p>
+                    <ul class="text-gray-700">
+                        <% order.orderedItems.forEach(item => { %>
+                            <li><%= item.name %> - Quantity: <%= item.quantity %></li>
+                        <% }) %>
+                    </ul>
+                    <p class="text-gray-700">$<%= calculateTotal(order.orderedItems) %></p>
+                    <p class="text-gray-700">Order Date: 2024-05-29</p>
+                </div>
+                <div class="space-x-2 py-10 flex flex-row justify-between flex-wrap">
+                    <button class="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600">Accept</button>
+                    <button class="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600">Reject</button>
+                </div>
+            </div>
+        <%  }) %>
+    </div>
+</div>
+
+<!-- Socket.io script -->
+<script src="/socket.io/socket.io.js"></script>
+<script>
+    function calculateTotal(orderedItems) {
+        let total = 0;
+        orderedItems.forEach(item => {
+            total += item.price * item.quantity; // Assuming each item has a price property
+        });
+        return total;
+    }
+    // Connect to the Socket.io server
+    const socket = io();
+
+    // Listen for 'newOrder' event
+    socket.on('newOrder', ({order, user}) => {
+        // Update UI with new order information
+        const orderList = document.getElementById('orderContainer');
+
+        // // Create a div for each order
+        const orderItem = document.createElement('div');
+        orderItem.classList.add('bg-white', 'shadow-md', 'rounded-lg', 'p-6', 'w-full', 'flex', 'justify-between', 'items-start');
+
+
+        // Create inner elements for order details
+        const orderDetailsDiv = document.createElement('div');
+        orderDetailsDiv.classList.add('px-2', 'py-2');
+
+        const buttonsDiv = document.createElement('div');
+        buttonsDiv.classList.add('space-x-2', 'py-10', 'flex', 'flex-row', 'flex-wrap', 'justify-between');
+        
+        // Order ID
+        const orderIdHeading = document.createElement('h3');
+        orderIdHeading.classList.add('text-xl', 'font-bold', 'mb-2');
+        orderIdHeading.textContent = order.orderNo;
+        
+        // Customer name
+        const customerPara = document.createElement('p');
+        customerPara.classList.add('text-gray-700');
+        customerPara.textContent = `Customer: ${user.fullname}`;
+
+        // Ordered items list
+        const itemsList = document.createElement('ul');
+        itemsList.classList.add('text-gray-700');
+        order.orderedItems.forEach(item => {
+            const itemLi = document.createElement('li');
+            itemLi.textContent = `${item.name} - Quantity: ${item.quantity}`;
+            itemsList.appendChild(itemLi);
+        });
+        
+        // Total price
+        const totalPricePara = document.createElement('p');
+        totalPricePara.classList.add('text-gray-700');
+        totalPricePara.textContent = `$${calculateTotal(order.orderedItems)}`;
+        
+        // Order date
+        const orderDatePara = document.createElement('p');
+        orderDatePara.classList.add('text-gray-700');
+        orderDatePara.textContent = `Order Date: ${order.date}`;
+        
+
+        // Accept button
+        const acceptButton = document.createElement('button');
+        acceptButton.classList.add('bg-green-500', 'text-white', 'px-4', 'py-2', 'rounded-md', 'hover:bg-green-600');
+        acceptButton.textContent = 'Accept';
+        
+        const rejectButton = document.createElement('button');
+        rejectButton.classList.add('bg-red-500', 'text-white', 'px-4', 'py-2', 'rounded-md', 'hover:bg-red-600');
+        rejectButton.textContent = 'Reject';
+
+        buttonsDiv.appendChild(acceptButton)
+        buttonsDiv.appendChild(rejectButton)
+        
+        orderItem.appendChild(orderDetailsDiv)
+        orderDetailsDiv.appendChild(orderIdHeading)
+        orderDetailsDiv.appendChild(customerPara)
+        orderDetailsDiv.appendChild(itemsList)
+        orderDetailsDiv.appendChild(totalPricePara)
+        
+        orderItem.appendChild(orderDetailsDiv)
+        orderItem.appendChild(buttonsDiv)
+        
+        orderList.appendChild(orderItem)
+        
+
+
+        
+    });
+
+    // // Confirm before reloading the page
+    // window.addEventListener('beforeunload', function(event) {
+    //     // Prompt the user for confirmation
+    //     event.preventDefault();
+    //     event.returnValue = '';
+    //     return ''; // For some browsers
+    // });
+</script>
+</body>
+</html>

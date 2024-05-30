@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-time Orders</title>
+</head>
+<body>
+
+    <h1>Real-time Order Updates</h1>
+    <ul id="order-list">
+        <% orders.forEach(order => { %>
+            <li>New Order ID: <%= order._id %></li>
+            <ul>
+                <% order.orderedItems.forEach(detail => { %>
+                    <li><%= detail.name %></li>
+                <% }); %>
+            </ul>
+        <% }); %>
+    </ul>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        // Connect to the Socket.io server
+        const socket = io();
+
+        // Listen for 'newOrder' event
+        socket.on('newOrder', ({order, user}) => {
+            // Update UI with new order information
+            const orderList = document.getElementById('order-list');
+            const orderItem = document.createElement('li');
+            orderItem.textContent = `New Order ID: ${order._id}`;
+
+            const detailList = document.createElement('ul');
+            order.orderedItems.forEach(detail => { // Fix: Change order.details to order.orderedItems
+                const detailItem = document.createElement('li');
+                detailItem.textContent = detail.name;
+                detailList.appendChild(detailItem);
+            });
+
+            orderItem.appendChild(detailList);
+            orderList.appendChild(orderItem);
+        });
+
+        // Confirm before reloading the page
+        window.addEventListener('beforeunload', function(event) {
+            // Prompt the user for confirmation
+            event.preventDefault();
+            event.returnValue = '';
+            return ''; // For some browsers
+        });
+    </script>
+</body>
+</html>

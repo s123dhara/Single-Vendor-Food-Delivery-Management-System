@@ -13,7 +13,9 @@
     "mongoose": "^8.4.0",
     "multer": "^1.4.5-lts.1",
     "node-modules": "^0.0.1",
-    "path": "^0.12.7"
+    "path": "^0.12.7",
+    "socket.io": "^4.7.5",
+    "socket.io-client": "^4.7.5"
   },
   "name": "food-delievery-managament-sysytem",
   "version": "1.0.0",
