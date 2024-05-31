@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Cards</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        /* Animation for sliding in from the right */
+        @keyframes slideInRight {
+            0% {
+                transform: translateX(100%);
+            }
+            100% {
+                transform: translateX(0);
+            }
+        }
+
+        /* Animation for sliding out to the right */
+        @keyframes slideOutRight {
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(100%);
+            }
+        }
+
+        .slide-in {
+            animation: slideInRight 0.5s forwards; /* Slide in animation */
+        }
+
+        .slide-out {
+                    animation: slideOutRight 0.5s forwards; /* Slide out animation */
+                }
+        .alert-box {
+            position: fixed; /* Fixes the position of the alert box */
+            top: 20px; /* Adjust the top position as needed */
+            left: 50%; /* Center horizontally */
+            transform: translateX(-50%); /* Center horizontally */
+            z-index: 1000; /* Ensure it appears on top of other content */
+        }
+    </style>
+</head>
+<body class="bg-gray-100 p-6">
+
+<nav class="bg-white shadow-md p-4">
+    <div class="flex justify-between items-center">
+        <a href="/" class="logo-image w-10 h-10 rounded-full overflow-hidden flex items-center justify-center bg-gray-200 shadow-md">
+            <img class="w-10 h-auto" src="/images/logo2.png" alt="Logo">
+        </a>
+        <div class="flex items-center space-x-4">
+            <a href="#" class="text-gray-700 hover:text-blue-500">Status</a>
+            <a href="/management/pendingOrder" class="text-gray-700 hover:text-blue-500" id="pending">Pending 
+                <% 
+                    let count = 0; // Initialize count outside the loop
+                    orders.forEach(order => { 
+                        if(order.orderStatus === 'accept'){ 
+                            count += 1; 
+                        } 
+                    }); 
+                %> 
+                (<span id="pending-count"><%= count %></span>)
+            </a>
+                    
+            <a href="#" class="text-gray-700 hover:text-blue-500">Delivered</a>
+        </div>
+    </div>
+</nav>
+
+<div id="alertBox" class="container mx-auto py-2 flex justify-center hidden">
+    <div  class="alert-box bg-red-200 shadow-md rounded-lg p-6 w-1/2 text-center">
+        <h2 class="text-red-500 font-bold text-2xl tracking-tighter">Oops! Waiting For Delivery Partner</h2>
+    </div>
+</div>
+
+<div class="min-h-screen flex items-center justify-center">
+    <div class="flex flex-wrap justify-center">
+        <!-- Sample Order Card -->
+        <% orders.forEach(order => { %>
+
+            <% if( order.orderStatus === 'accept'){ %>
+                <div class="order-card bg-white shadow-md rounded-md m-2 p-6 w-80">
+                    <h2 class="text-lg font-semibold mb-4">Order No: <%= order.orderNo %></h2>
+                    <p class="mb-2"><span class="font-semibold">Customer Name:</span> <%=  order.user.fullname %></p>
+                    <ul class="text-gray-700">
+                        <% order.orderedItems.forEach(item => { %>
+                            <li><%= item.name %> - Quantity: <%= item.quantity %></li>
+                        <% }) %>
+                    </ul>
+                    <!-- Add more items as needed -->
+                    <p class="mb-2"><span class="font-semibold">Date:</span> May 31, 2024</p>
+                    <button class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded" id ="ready-button-<%= order._id %>">Ready</button>
+                </div>
+            <% } %>
+        <% }) %>
+        
+        
+    </div>
+</div>
+
+<!-- Hidden div that will slide in from the right -->
+<div id="slide-in-div" class="fixed top-0 mt-20 right-0 h-72 w-80 bg-white border-2 p-4 transform translate-x-full rounded-md shadow-lg transition-transform duration-300 ease-in-out">
+    <h2 id="order-id-placeholder" class="text-lg tracking-tighter font-semibold mb-4">Order No : <span></span> </h2>
+    <p class="mb-4">The order is now ready for pickup.</p>
+    <div>
+        <h3>Delivery ID : <span>101</span></h3>
+        <p class="font-semibold text-lg" id="delivery-partner-name">
+            Delivery Partner : <span>Mr. Sample Das</span>
+        </p>
+        <h4 class="py-1 px-2 text-xl tracking-tighter font-bold">Out for Delivery?</h4>
+        <button class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded mr-2" id="confirm-button">Confirm</button>
+        <button class="bg-gray-400 hover:bg-red-500 text-white font-semibold py-2 px-4 rounded" id="cancel-button">Cancel</button>
+    </div>
+</div>
+
+<script>
+    // Loop through all ready buttons and attach click event listeners
+    document.querySelectorAll('[id^="ready-button-"]').forEach(function(button) {
+        button.addEventListener('click', async function() {
+            var orderId = this.id.split('-')[2]; // Extract the order ID from the button's ID
+            
+
+            fetch(`/product/delivery/${orderId}`)
+                .then(response => response.json())
+                .then(result => {
+                    if (result && result.assignedPartnerId) {
+                        // Handle the case where a delivery partner is assigned
+                        console.log('Assigned Partner ID:', result.assignedPartnerId);
+                        // Add additional code here if needed
+                    } else {
+                        // If no delivery partner is assigned, show the alert box
+                        const alertBox = document.getElementById("alertBox");
+                        if (alertBox) {
+                            alertBox.classList.remove('hidden');
+
+                            setTimeout( () => { 
+                                alertBox.classList.add('hidden')
+                            },2000)
+                        } else {
+                            console.error('Alert box element not found');
+                        }
+                    }
+                    fetch(`/product/orders/${orderId}`)
+                    .then(response => response.json())
+                    .then(data => { 
+        
+                        document.getElementById('slide-in-div').classList.add('slide-in');
+                        document.querySelector('#delivery-partner-name span').textContent = result.partner.fullname
+                        document.querySelector('#order-id-placeholder span').textContent = data.orderNo
+                    })
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    // Optionally handle errors here
+                });
+
+            
+            // Show the slide-in div by adding the 'slide-in' class
+            document.getElementById('slide-in-div').classList.remove('slide-out');
+            
+            // Update the content of the order ID placeholder with the actual order ID
+            // document.getElementById('delivery-partner-name').textContent = storeData.orderStatus
+
+            // After 2 seconds (2000 milliseconds), hide the slide-in div by removing the 'slide-in' class
+            setTimeout(function() {
+                document.getElementById('slide-in-div').classList.add('slide-out');
+                document.getElementById('slide-in-div').classList.remove('slide-in');
+            }, 5000);
+        });
+    });
+</script>
+
+</body>
+</html>

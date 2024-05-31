@@ -15,7 +15,15 @@
             </a>
             <div class="flex items-center space-x-4">
                 <a href="#" class="text-gray-700 hover:text-blue-500">Status</a>
-                <a href="#" class="text-gray-700 hover:text-blue-500" id="pending">Pending <span>(0)</span></a>
+                <% 
+                  let totalCount = 0; 
+                  orders.forEach(order => { 
+                    if (order.orderStatus === 'accept') { 
+                      totalCount += 1; 
+                    }
+                  }); 
+                %>
+                <a href="/management/pendingOrder" class="text-gray-700 hover:text-blue-500" id="pending">Pending (<span id="pending-count"><%= totalCount %></span>)</a>                
                 <a href="#" class="text-gray-700 hover:text-blue-500">Delivered</a>
             </div>
         </div>
@@ -69,13 +77,7 @@
 <!-- Socket.io script -->
 <script src="/socket.io/socket.io.js"></script>
 <script>
-    function updateCartCount() {
-            var cart = JSON.parse(localStorage.getItem('cart')) || [];
-            var totalCount = cart.reduce((acc, item) => acc + item.quantity, 0);
-            document.getElementById('cart-count').innerText = totalCount;
-            document.getElementById('cart-link').innerText = `Cart (${totalCount})`;
-        }
-
+    
 function acceptOrder(orderId) {
         // Prepare data
         const data = {
@@ -102,6 +104,13 @@ function acceptOrder(orderId) {
     }
     // Connect to the Socket.io server
     const socket = io();
+
+    socket.on('pendingCount', (pendingCount) => {
+    const pendingCountElement = document.getElementById("pending-count");
+    if (pendingCountElement) {
+        pendingCountElement.textContent = pendingCount;
+    }
+    });
 
     // Listen for 'newOrder' event
     socket.on('newOrder', ({order, user}) => {
@@ -160,6 +169,13 @@ function acceptOrder(orderId) {
                 action : 'accept'
             }
             socket.emit('orderAction', data)
+
+            socket.on('pendingCount', (pendingCount) => {
+                const pendingCountElement = document.getElementById("pending-count");
+                if (pendingCountElement) {
+                    pendingCountElement.textContent = pendingCount;
+                }
+            });
             orderItem.remove(); // Remove the order item div when the Accept button is clicked
         });
                 

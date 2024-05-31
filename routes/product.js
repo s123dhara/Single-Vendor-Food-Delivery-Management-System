@@ -5,7 +5,9 @@ const flash = require('connect-flash')
 const productModel = require('../models/product')
 const orderModel = require('../models/order')
 const userModel = require('../models/user')
+const deliveryPartnerModel = require('../models/deliveryPartner')
 const { isUserLoggedIn, calculateTotal } = require('../middleware/userhandler')
+const {assignDeliveryPartner } = require('../middleware/adminhandler')
 const socketIo = require('socket.io-client'); // Import socket.io-client library
 
 // Set up Socket.IO client to connect to the server
@@ -53,6 +55,34 @@ router.post("/createOrder", isUserLoggedIn, async (req, res) => {
     } catch (error) {
         console.error('Error creating order:', error);
         res.status(500).json({ success: false, error: 'Failed to create order' });
+    }
+});
+
+router.get('/orders/:orderId', async (req, res) => {
+    const orderId = req.params.orderId;
+    // Find the order with the specified orderId
+    const order = await orderModel.findOne({_id : orderId});
+    if (!order) {
+        // If order not found, return 404 Not Found status
+        res.status(404).send('Order not found');
+    } else {
+        // If order found, return the order details as JSON
+        res.json(order);
+        // res.send(order)
+    }
+});
+router.get('/delivery/:orderId', async (req, res) => {
+    const orderId = req.params.orderId;
+
+    // Call assignDeliveryPartner and wait for its result
+    let possibleDelivery = await assignDeliveryPartner();
+
+    if (possibleDelivery) {
+        let partner = await deliveryPartnerModel.findOne({_id : possibleDelivery})
+        res.json({ assignedPartnerId: possibleDelivery , partner : partner});
+
+    } else {
+        res.status(404).json({ assignedPartnerId : possibleDelivery, partner : null});
     }
 });
 

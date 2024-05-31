@@ -35,6 +35,7 @@ const profileRouter = require('./routes/profile');
 const productRouter = require('./routes/product');
 const aboutRouter = require('./routes/about');
 const managementRouter = require('./routes/management')
+const deliveryRouter = require('./routes/delivery')
 
 app.use('/signup', signupRouter);
 app.use('/login', loginRouter);
@@ -43,6 +44,7 @@ app.use('/profile', profileRouter);
 app.use('/product', productRouter);
 app.use('/about', aboutRouter);
 app.use('/management', managementRouter)
+app.use('/delivery', deliveryRouter)
 
 // Database connection
 const db = require('./config/mongoose-connect');
@@ -63,7 +65,16 @@ io.on('connection', (socket) => {
         let order = await orderModel.findOne({_id : data.orderId})
         order.orderStatus = data.action
         await order.save()
-        console.log(order)
+        
+        let orders = await orderModel.find()
+        let pendingCount = 0
+        orders.forEach( order => {
+            if ( order.orderStatus === 'accept'){
+                pendingCount += 1
+            }
+        })
+
+        socket.emit('pendingCount' , pendingCount)
     })
 
     socket.on('disconnect', () => {

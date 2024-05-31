@@ -23,4 +23,10 @@ router.get("/", async (req, res) => {
 });
 
 
+router.get('/pendingOrder', async (req, res) => {
+    let orders = await orderModel.find().populate('user')
+    res.render('pendingOrder', {orders})
+})
+
+
 module.exports = router
