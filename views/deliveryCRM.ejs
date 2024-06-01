@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Delivery Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        .card {
+            transition: all 0.3s;
+        }
+
+        .card:hover {
+            transform: scale(1.02);
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <header class="bg-white shadow">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center py-4">
+                <h1 class="text-xl font-bold">Live Delivery Dashboard</h1>
+                <nav>
+                    <ul class="flex space-x-4">
+                        <li><a href="#" class="text-gray-700 hover:text-gray-900">Dashboard</a></li>
+                        <li><a href="#" class="text-gray-700 hover:text-gray-900">Orders</a></li>
+                        <li><a href="#" class="text-gray-700 hover:text-gray-900">Customers</a></li>
+                        <li><a href="#" class="text-gray-700 hover:text-gray-900">Settings</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-8">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <!-- Delivery Card Example -->
+            <div class="bg-white p-6 rounded-lg shadow-md card">
+                <h2 class="text-lg font-semibold mb-4">Delivery #12345</h2>
+                <p><strong>Status:</strong> In Transit</p>
+                <p><strong>Delivery Partner:</strong> John Doe</p>
+                <p><strong>Delivery Address:</strong> 123 Main St, City, Country</p>
+                <p><strong>Estimated Delivery Time:</strong> 3:00 PM</p>
+                <button class="mt-4 bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded">
+                    View Details
+                </button>
+            </div>
+
+            <!-- More Delivery Cards Here -->
+        </div>
+    </main>
+
+    <footer class="bg-gray-800 text-white py-4">
+        <div class="container mx-auto px-4">
+            <p class="text-center">&copy; 2024 Live Delivery Dashboard. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>

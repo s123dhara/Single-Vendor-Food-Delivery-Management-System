@@ -33,6 +33,9 @@
         .slide-out {
                     animation: slideOutRight 0.5s forwards; /* Slide out animation */
                 }
+        .slide-out-immediate {
+            animation : slideOutRight 0.1s forwards;
+        }        
         .alert-box {
             position: fixed; /* Fixes the position of the alert box */
             top: 20px; /* Adjust the top position as needed */
@@ -63,6 +66,7 @@
                 (<span id="pending-count"><%= count %></span>)
             </a>
                     
+            <a href="#" class="text-gray-700 hover:text-blue-500">Waiting(0)</a>
             <a href="#" class="text-gray-700 hover:text-blue-500">Delivered</a>
         </div>
     </div>
@@ -80,7 +84,7 @@
         <% orders.forEach(order => { %>
 
             <% if( order.orderStatus === 'accept'){ %>
-                <div class="order-card bg-white shadow-md rounded-md m-2 p-6 w-80">
+                <div class="order-card bg-white shadow-md rounded-md m-2 p-6 w-80" id="order-<%= order._id%>">
                     <h2 class="text-lg font-semibold mb-4">Order No: <%= order.orderNo %></h2>
                     <p class="mb-2"><span class="font-semibold">Customer Name:</span> <%=  order.user.fullname %></p>
                     <ul class="text-gray-700">
@@ -114,7 +118,9 @@
     </div>
 </div>
 
+<script src="/socket.io/socket.io.js"></script>
 <script>
+    const socket = io('http://localhost:3000');
     // Loop through all ready buttons and attach click event listeners
     document.querySelectorAll('[id^="ready-button-"]').forEach(function(button) {
         button.addEventListener('click', async function() {
@@ -128,7 +134,80 @@
                         // Handle the case where a delivery partner is assigned
                         console.log('Assigned Partner ID:', result.assignedPartnerId);
                         // Add additional code here if needed
-                    } else {
+
+                        
+                    fetch(`/product/orders/${orderId}`)
+                    .then(response => response.json())
+                    .then(data => { 
+        
+                        document.getElementById('slide-in-div').classList.add('slide-in');
+                        document.getElementById('slide-in-div').classList.remove('slide-out');
+                        document.getElementById('slide-in-div').classList.remove('slide-out-immediate');
+                        document.querySelector('#delivery-partner-name span').textContent = result.partner.fullname
+                        document.querySelector('#order-id-placeholder span').textContent = data.orderNo
+
+                        
+                        const confirmButton = document.getElementById("confirm-button")
+                        
+                        let confirmButtonClicked = false
+                        confirmButton.addEventListener('click', function(){
+                                const data = {
+                                    orderId : orderId,
+                                    action : 'Out For Delivery'
+                                }
+
+                        fetch('/delivery/assignId', {
+                            method : 'POST',
+                            headers : {
+                                'Content-Type' : 'application/json'
+                            },
+                            body : JSON.stringify({ orderId : orderId, assignedPartnerId : result.assignedPartnerId})
+                        })
+                        .then( response => {
+                            if(response.ok){
+                                return response.json()
+                            }
+                            else{
+                                throw new Error("Falaed")
+                            }
+                        })
+                        .catch(error => console.log("errrrrrrrro" , error))
+
+                        confirmButtonClicked = true
+                        socket.emit('orderAction', data);
+                        socket.on("pendingCount", (pendingcount) => {
+                            const pendingCountElement = document.getElementById("pending-count")
+                            if(pendingCountElement)
+                            {
+                                pendingCountElement.textContent = pendingcount
+                            }
+    
+                            var orderDiv = document.getElementById('order-' + orderId);
+                                if (orderDiv) {
+                                    // Remove the order div from the DOM
+                                    orderDiv.remove();
+                                }
+                            
+                            document.getElementById('slide-in-div').classList.add('slide-out-immediate');
+                            document.getElementById('slide-in-div').classList.remove('slide-in');
+                            window.open(`/delivery/deliveryon/${result.assignedPartnerId}`, '_blank');
+                        })
+                    
+                    })
+                    
+                    setTimeout(function() {
+                        if(confirmButtonClicked == false){
+                            document.getElementById('slide-in-div').classList.add('slide-out');
+                            document.getElementById('slide-in-div').classList.remove('slide-in');
+                        }
+                    }, 5000);
+
+                    
+                })
+                         
+                }
+            
+                else {
                         // If no delivery partner is assigned, show the alert box
                         const alertBox = document.getElementById("alertBox");
                         if (alertBox) {
@@ -141,32 +220,15 @@
                             console.error('Alert box element not found');
                         }
                     }
-                    fetch(`/product/orders/${orderId}`)
-                    .then(response => response.json())
-                    .then(data => { 
-        
-                        document.getElementById('slide-in-div').classList.add('slide-in');
-                        document.querySelector('#delivery-partner-name span').textContent = result.partner.fullname
-                        document.querySelector('#order-id-placeholder span').textContent = data.orderNo
-                    })
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    // Optionally handle errors here
-                });
+            })
+            
+            .catch(error => {
+                console.error('Error:', error);
+                // Optionally handle errors here
+            });
 
             
-            // Show the slide-in div by adding the 'slide-in' class
-            document.getElementById('slide-in-div').classList.remove('slide-out');
             
-            // Update the content of the order ID placeholder with the actual order ID
-            // document.getElementById('delivery-partner-name').textContent = storeData.orderStatus
-
-            // After 2 seconds (2000 milliseconds), hide the slide-in div by removing the 'slide-in' class
-            setTimeout(function() {
-                document.getElementById('slide-in-div').classList.add('slide-out');
-                document.getElementById('slide-in-div').classList.remove('slide-in');
-            }, 5000);
         });
     });
 </script>

@@ -86,6 +86,16 @@ router.get('/delivery/:orderId', async (req, res) => {
     }
 });
 
+router.post('/test', (req, res)=>{
+    console.log('comming data from ', req.body)
+    
+    const data = {
+        orderId : req.body.orderId,
+        action : 'Out For Delivery'
+    }
+
+    socket.emit('OrderAction', data);
+})
 
 router.post('/updateStatus', async (req, res)=>{
     let {orderId , status } = req.body

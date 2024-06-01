@@ -103,12 +103,12 @@ function acceptOrder(orderId) {
         return total;
     }
     // Connect to the Socket.io server
-    const socket = io();
-
+    const socket = io('http://localhost:3000');
+    
     socket.on('pendingCount', (pendingCount) => {
     const pendingCountElement = document.getElementById("pending-count");
     if (pendingCountElement) {
-        pendingCountElement.textContent = pendingCount;
+        pendingCountElement.innerText = pendingCount;
     }
     });
 

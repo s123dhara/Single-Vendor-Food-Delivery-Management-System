@@ -48,6 +48,7 @@ app.use('/delivery', deliveryRouter)
 
 // Database connection
 const db = require('./config/mongoose-connect');
+const order = require('./models/order');
 
 // Socket.IO connection handling
 io.on('connection', (socket) => {
@@ -72,11 +73,10 @@ io.on('connection', (socket) => {
             if ( order.orderStatus === 'accept'){
                 pendingCount += 1
             }
-        })
-
-        socket.emit('pendingCount' , pendingCount)
+        })        
+        io.emit('pendingCount' , pendingCount)
     })
-
+    
     socket.on('disconnect', () => {
         console.log('Client disconnected');
     });
