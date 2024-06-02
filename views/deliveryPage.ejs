@@ -123,7 +123,7 @@
                 console.log("Received data:", data); // Log received data
                 // Handle the response data as needed
                 // For example, you can display a success message or update UI elements
-                window.location.href = '/'; // Redirect to the homepage
+                window.location.href = `/delivery/deliveryCRM/${partnerId}`; // Redirect to the homepage
             })
             .catch(error => console.log("Error:", error));
         });

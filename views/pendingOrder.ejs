@@ -121,12 +121,12 @@
 <script src="/socket.io/socket.io.js"></script>
 <script>
     const socket = io('http://localhost:3000');
+    let confirmButtonClicked = false
     // Loop through all ready buttons and attach click event listeners
     document.querySelectorAll('[id^="ready-button-"]').forEach(function(button) {
         button.addEventListener('click', async function() {
             var orderId = this.id.split('-')[2]; // Extract the order ID from the button's ID
             
-
             fetch(`/product/delivery/${orderId}`)
                 .then(response => response.json())
                 .then(result => {
@@ -148,52 +148,15 @@
 
                         
                         const confirmButton = document.getElementById("confirm-button")
-                        
-                        let confirmButtonClicked = false
-                        confirmButton.addEventListener('click', function(){
-                                const data = {
-                                    orderId : orderId,
-                                    action : 'Out For Delivery'
-                                }
-
-                        fetch('/delivery/assignId', {
-                            method : 'POST',
-                            headers : {
-                                'Content-Type' : 'application/json'
-                            },
-                            body : JSON.stringify({ orderId : orderId, assignedPartnerId : result.assignedPartnerId})
-                        })
-                        .then( response => {
-                            if(response.ok){
-                                return response.json()
+                        confirmButtonClicked = false;
+                        confirmButton.addEventListener('click', function handleClick() {
+                            if (!confirmButtonClicked) {
+                                handleConfirmButtonClick(orderId, result.assignedPartnerId);
+                                confirmButtonClicked = true;
+                                // Remove this event listener after it has been triggered
+                                confirmButton.removeEventListener('click', handleClick);
                             }
-                            else{
-                                throw new Error("Falaed")
-                            }
-                        })
-                        .catch(error => console.log("errrrrrrrro" , error))
-
-                        confirmButtonClicked = true
-                        socket.emit('orderAction', data);
-                        socket.on("pendingCount", (pendingcount) => {
-                            const pendingCountElement = document.getElementById("pending-count")
-                            if(pendingCountElement)
-                            {
-                                pendingCountElement.textContent = pendingcount
-                            }
-    
-                            var orderDiv = document.getElementById('order-' + orderId);
-                                if (orderDiv) {
-                                    // Remove the order div from the DOM
-                                    orderDiv.remove();
-                                }
-                            
-                            document.getElementById('slide-in-div').classList.add('slide-out-immediate');
-                            document.getElementById('slide-in-div').classList.remove('slide-in');
-                            window.open(`/delivery/deliveryon/${result.assignedPartnerId}`, '_blank');
-                        })
-                    
-                    })
+                        });
                     
                     setTimeout(function() {
                         if(confirmButtonClicked == false){
@@ -231,6 +194,52 @@
             
         });
     });
+
+
+
+    function handleConfirmButtonClick(orderId, assignedPartnerId) {
+            const data = {
+                orderId: orderId,
+                action: 'Out For Delivery'
+            };
+
+            fetch('/delivery/assignId', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ orderId: orderId, assignedPartnerId: assignedPartnerId })
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error("Failed");
+                }
+            })
+            .catch(error => console.log("Error:", error));
+
+            confirmButtonClicked = true;
+            socket.emit('orderAction', data);
+            socket.on("pendingCount", (pendingcount) => {
+                const pendingCountElement = document.getElementById("pending-count");
+                if (pendingCountElement) {
+                    pendingCountElement.textContent = pendingcount;
+                }
+
+                var orderDiv = document.getElementById('order-' + orderId);
+                if (orderDiv) {
+                    // Remove the order div from the DOM
+                    orderDiv.remove();
+                }
+
+                document.getElementById('slide-in-div').classList.add('slide-out-immediate');
+                document.getElementById('slide-in-div').classList.remove('slide-in');
+                window.open(`/delivery/deliveryCRM/${assignedPartnerId}`, '_blank');
+            });
+}
+
+
 </script>
 
 </body>

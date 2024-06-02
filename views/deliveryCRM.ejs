@@ -3,57 +3,135 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Live Delivery Dashboard</title>
+    <title>Phone Screen</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+
     <style>
         .card {
-            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-around;
+            width: 280px;
+            padding: 20px 1px;
+            margin: 10px 0;
+            text-align: center;
+            position: relative;
+            cursor: pointer;
+            box-shadow: 0 10px 15px -3px rgba(33,150,243,.4),0 4px 6px -4px rgba(33,150,243,.4);
+            border-radius: 10px;
+            background-color: #6B6ECC;
+            background: linear-gradient(45deg, #04051dea 0%, #2b566e 100%);
         }
 
-        .card:hover {
-            transform: scale(1.02);
+        .content {
+            padding: 20px;
         }
+
+        .content .price {
+            color: white;
+            font-weight: 800;
+            font-size: 50px;
+            text-shadow: 0px 0px 10px rgba(0, 0, 0, 0.42);
+        }
+
+        .content .description {
+            color: rgba(255, 255, 255, 0.6);
+            margin-top: 10px;
+            font-size: 14px;
+        }
+
+        .content .title {
+            font-weight: 800;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.64);
+            margin-top: 10px;
+            font-size: 25px;
+            letter-spacing: 1px;
+        }
+
+        .btn {
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            user-select: none;
+            border: none;
+            outline: none;
+            color: rgb(255 255 255);
+            text-transform: uppercase;
+            font-weight: 700;
+            font-size: .75rem;
+            padding: 0.75rem 1.5rem;
+            background-color: rgb(71, 196, 48);
+            border-radius: 0.5rem;
+            width: 90%;
+            text-shadow: 0px 4px 18px #2c3442;
+        }
+
+        .btn:hover {
+            background-color: rgb(44, 119, 31);
+        }
+
     </style>
+
 </head>
-<body class="bg-gray-100">
-    <header class="bg-white shadow">
-        <div class="container mx-auto px-4">
-            <div class="flex justify-between items-center py-4">
-                <h1 class="text-xl font-bold">Live Delivery Dashboard</h1>
-                <nav>
-                    <ul class="flex space-x-4">
-                        <li><a href="#" class="text-gray-700 hover:text-gray-900">Dashboard</a></li>
-                        <li><a href="#" class="text-gray-700 hover:text-gray-900">Orders</a></li>
-                        <li><a href="#" class="text-gray-700 hover:text-gray-900">Customers</a></li>
-                        <li><a href="#" class="text-gray-700 hover:text-gray-900">Settings</a></li>
+
+<body class="bg-gray-200 flex flex-col justify-center items-center h-screen">
+    <h2 class="text-2xl font-bold text-zinc-600">Upcoming Orders</h2>
+
+    <div class="flex flex-row gap-4 mt-1">
+        <button id="on-btn" class="on-btn bg-green-600 text-white w-32 h-8 rounded-lg border-teal-200 border hover:bg-green-700" onclick="change()">Delivery ON</button>
+        <button class="break-btn bg-gray-400 text-white w-32 h-8 rounded-lg border-teal-200 border hover:bg-gray-600">Break</button>
+    </div>
+
+    <% if (isOrder) { %>
+        <div class="card" id="order-card" style="display: none;">
+            <div class="content">
+                <div class="title">Foodie Haven</div>
+                <div class="price">₹40.00</div>
+                <div class="description">
+                    <p><strong>Order Details:</strong></p>
+                    <p><strong>Delivery Address:</strong> 123 Main St, City, Country</p>
+                    <p><strong>Estimated Delivery Time:</strong> 3:00 PM</p>
+                    <p><strong>Delivery Items:</strong></p>
+                    <ul>
+                        <% partner.currentOrderId.orderedItems.forEach(item => { %>
+                            <li><%= item.name %></li>
+                        <% }) %>
+                        <!-- Add more items here if needed -->
                     </ul>
-                </nav>
+                </div>
             </div>
+            <!-- <button id="delivered-btn-<%= partner._id %>" style="display: none;">
+                Delivered
+            </button> -->
+    
+            <button class="btn" id="accept-btn-<%= partner._id %>">Accept</button>
         </div>
-    </header>
+    <% } %>
 
-    <main class="container mx-auto px-4 py-8">
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            <!-- Delivery Card Example -->
-            <div class="bg-white p-6 rounded-lg shadow-md card">
-                <h2 class="text-lg font-semibold mb-4">Delivery #12345</h2>
-                <p><strong>Status:</strong> In Transit</p>
-                <p><strong>Delivery Partner:</strong> John Doe</p>
-                <p><strong>Delivery Address:</strong> 123 Main St, City, Country</p>
-                <p><strong>Estimated Delivery Time:</strong> 3:00 PM</p>
-                <button class="mt-4 bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded">
-                    View Details
-                </button>
-            </div>
+    <script>
+        const partnerId = "<%= partner._id %>";
+        const isOrder = Boolean('<%= isOrder %>'); // Convert isOrder to JavaScript boolean
+        
+        // Check if isOrder is true, and if so, display the card
+        if (isOrder) {
+            document.getElementById('order-card').style.display = 'block';
+        }
 
-            <!-- More Delivery Cards Here -->
-        </div>
-    </main>
+        function change(){
+            const onBtn = document.getElementById('on-btn');
+                onBtn.classList.remove('bg-green-600');
+                onBtn.classList.remove('hover:bg-green-700')
+                onBtn.innerText = "Delivery OfF"
+                onBtn.classList.add('bg-red-500')
+                onBtn.classList.add('hover:bg-red-700')
+        }
 
-    <footer class="bg-gray-800 text-white py-4">
-        <div class="container mx-auto px-4">
-            <p class="text-center">&copy; 2024 Live Delivery Dashboard. All rights reserved.</p>
-        </div>
-    </footer>
+        const acceptButton = document.getElementById('accept-btn-' + partnerId);
+
+        acceptButton.addEventListener('click', () => {
+            window.location.href = `/delivery/deliveryon/${partnerId}`;
+        });
+    </script>
 </body>
 </html>

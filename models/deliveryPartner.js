@@ -11,7 +11,8 @@ const deliveryPartnerModel = new mongoose.Schema({
     currentOrderId : {
         type : mongoose.Schema.Types.ObjectId,
         ref : 'order'
-    }
+    },
+    currentOrderNo : { type : Number, default : -1}
     
 });
 

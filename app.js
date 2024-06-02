@@ -62,7 +62,7 @@ io.on('connection', (socket) => {
 
 
     socket.on('orderAction', async (data) => {
-        console.log( ` data will be : ${data.action} and ${data.orderId}`)
+        // console.log( ` data will be : ${data.action} and ${data.orderId}`)
         let order = await orderModel.findOne({_id : data.orderId})
         order.orderStatus = data.action
         await order.save()

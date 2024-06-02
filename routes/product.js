@@ -9,11 +9,17 @@ const deliveryPartnerModel = require('../models/deliveryPartner')
 const { isUserLoggedIn, calculateTotal } = require('../middleware/userhandler')
 const {assignDeliveryPartner } = require('../middleware/adminhandler')
 const socketIo = require('socket.io-client'); // Import socket.io-client library
+const cron = require('node-cron');
+
 
 // Set up Socket.IO client to connect to the server
 const socket = socketIo('http://localhost:3000'); // Adjust the URL as needed
 
-var orderNo = 0
+let orderNo = 0
+cron.schedule('0 7 * * *', () => {
+    orderNo = 0;
+    console.log('Order number reset to 0 at 7:00 AM');
+});
 
 router.get("/", async (req, res) => {
     let products = await productModel.find()
